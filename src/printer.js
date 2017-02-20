@@ -35,8 +35,11 @@ process.on('SIGTERM', exit);
 
 function exit() {
     console.log('Stopping and halting ...');
-    device.close(() => setTimeout(process.exit, 10));
-}
+    try {
+        device.close(() => setTimeout(process.exit, 100));
+    } catch (e) {
+        process.exit();
+    }}
 
 process.on('uncaughtException', (err) => {
     console.error(err);
