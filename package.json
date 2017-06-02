@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "escpos": "^2.3.0",
-    "ngrok": "^2.2.6"
+    "ngrok": "^2.2.6",
+    "phoenix": "^1.2.1"
   }
 }
