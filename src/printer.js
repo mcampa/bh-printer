@@ -1,13 +1,16 @@
 const escpos = require('escpos');
-const device  = new escpos.Serial('/dev/usb/lp0');
+const os = require('os');
+const device  = os.platform() === 'darwin'
+    ? new escpos.USB()
+    : new escpos.Serial('/dev/usb/lp0');
 const printer = new escpos.Printer(device);
 
-function print(data, callback) {
-    // const payload = new Buffer(data.payload, 'base64');
-    // const buffer = new MutableBuffer();
-    const payload = Buffer.from(data.payload, 'base64');
+function print(body, callback) {
+    console.log('body', body);
+    const payload = Buffer.from(body, 'base64');
 
     device.open(() => {
+        console.log('opened')
         try {
             device.write(payload, (err) => {
                 if (err) {
@@ -30,8 +33,8 @@ function test(data, callback) {
     });
 }
 
-process.on('SIGINT', exit);
-process.on('SIGTERM', exit);
+// process.on('SIGINT', exit);
+// process.on('SIGTERM', exit);
 
 function exit() {
     console.log('Stopping and halting ...');

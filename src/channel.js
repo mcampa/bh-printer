@@ -19,6 +19,7 @@ class Channel {
     }
 
     connect() {
+        console.log('connect');
         this.socket = new Socket(this.url, {
             params: {
                 printer_id: this.printerId,
@@ -29,43 +30,60 @@ class Channel {
         this.socket.connect();
 
         // Now that you are connected, you can join channels with a topic:
-        this.channel = this.socket.channel("printer:lobby", {});
+        this.channel = this.socket.channel(`printer:${this.printerId}`);
 
-        this.channel.onMessage = (event, payload, ref) => {
-            console.log('onMessage', event, payload, ref);
-            // this.channel.push('hello', {a: 1})
-            return payload
-        };
+        // this.channel.onMessage = (event, payload, ref) => {
+        //     console.log('onMessage', event, payload, ref);
+        //     return payload
+        // };
 
-        this.channel.join();
+        this.channel.join().receive("ok", () => {
+            console.log('Connected to server');
+        });
 
-
-        // this.channel.join().receive("ok", () => this.addListenEvents());
-        // this.channel.join().receive("ok", () => this.channel.push('hello', {a: 1}));
+        this.addListenEvents();
     }
 
     addListenEvents() {
-        this.channel.on('log', data => console.log);
-        this.channel.on('ping', data => this.ping(data, this.requestHandler.bind(this, data.requestId)));
-        this.channel.on('print-test', data => printer.test(data, this.requestHandler.bind(this, data.requestId)));
-        this.channel.on('print', data => printer.print(data, this.requestHandler.bind(this, data.requestId)));
-        this.channel.on('tunnel-open', data => tunnel.open(data, this.requestHandler.bind(this, data.requestId)));
-        this.channel.on('tunnel-close', data => tunnel.close(data, this.requestHandler.bind(this, data.requestId)));
+        const actions = [
+            {
+                event: 'health',
+                method: this.health,
+            },
+            {
+                event: 'print_test',
+                method: printer.test,
+            },
+            {
+                event: 'print',
+                method: printer.print,
+            },
+            {
+                event: 'tunnel_open',
+                method: tunnel.open,
+            },
+            {
+                event: 'tunnel_close',
+                method: tunnel.close,
+            },
+        ];
+
+        actions.forEach(action => {
+            this.channel.on(action.event, req => {
+                action.method(req.body, this.requestHandler.bind(this, req.request_id));
+            });
+        });
     }
 
-    ping(data, callback) {
-        callback(null, { id: this.printerId, ping: data });
+    health(data, callback) {
+        console.log('health', new Date);
+        callback(null, { id: this.printerId, date: new Date });
     }
 
     requestHandler(requestId, err, response) {
-        if (err) {
-            console.error(err);
-            return this.channel.push('error-response', {
-                requestId,
-                error: { message: err.message, stack: err.stack, details: err.details },
-            });
-        }
-        this.channel.push('response', { requestId, response });
+        const error = err && { message: err.message, stack: err.stack, details: err.details };
+
+        this.channel.push(`request:${requestId}`, { error, response });
     }
 }
 
