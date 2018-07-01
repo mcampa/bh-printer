@@ -11,6 +11,6 @@
   "dependencies": {
     "escpos": "^2.3.0",
     "ngrok": "^2.2.6",
-    "phoenix": "^1.2.1"
+    "socket.io-client": "^2.1.1"
   }
 }
