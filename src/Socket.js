@@ -3,17 +3,16 @@ const printer = require('./printer');
 const tunnel = require('./tunnel');
 
 class Socket {
-  static init(url, printerId, token) {
-    const channel = new Socket(url, printerId, token);
+  static init(url, printerId) {
+    const channel = new Socket(url, printerId);
     channel.connect();
 
     return channel;
   }
 
-  constructor(url, printerId, token) {
+  constructor(url, printerId) {
     this.url = url;
     this.printerId = printerId;
-    this.token = token;
     this.socket = null;
   }
 
