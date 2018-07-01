@@ -9,9 +9,9 @@ function launch {
      git reset --hard @{u} &&
      git clean -xdf &&
      git pull
-     yarn
   fi
 
+  yarn
   nodemon ./
 }
 

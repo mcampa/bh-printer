@@ -25,6 +25,7 @@ sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get dist-upgrade
 sudo apt-get install -y git
+sudo dpkg-reconfigure locales (en_US.UTF-8 UTF-8)
 ```
 
 ## Install NVM and Node
