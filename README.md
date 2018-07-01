@@ -42,8 +42,9 @@ cd && git clone https://github.com/mcampa/bh-printer.git
 ## Start at boot
 Append to `/etc/rc.local` (replace printer id)
 ```
+export PRINTER_ID=printer1
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
 cd ~/bh-printer
-PRINTER_ID={printerID} nodemon < /dev/null >/var/tmp/bh-printer.log 2>&1
+./start.sh < /dev/null >/var/log/bh-printer.log 2>/var/log/bh-printer.err &
 ```
