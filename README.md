@@ -24,7 +24,7 @@ sudo dd bs=1m if=raspbian.img of=/dev/rdisk2 conv=sync
 sudo apt-get update
 sudo apt-get upgrade
 sudo apt-get dist-upgrade
-sudo apt-get install -y git
+sudo apt-get install -y git build-essential libudev-dev
 sudo dpkg-reconfigure locales (en_US.UTF-8 UTF-8)
 ```
 
@@ -38,6 +38,7 @@ npm install -g yarn nodemon
 ## install bh-printer
 ```
 cd && git clone https://github.com/mcampa/bh-printer.git
+cd ~/bh-printer && yarn
 ```
 
 ## Start at boot
