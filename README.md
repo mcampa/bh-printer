@@ -28,6 +28,13 @@ sudo apt-get install -y git build-essential libudev-dev
 sudo dpkg-reconfigure locales (en_US.UTF-8 UTF-8)
 ```
 
+## Give user permissions to access usb
+```
+sudo usermod -a -G lp $(whoami)
+sudo usermod -a -G dialout $(whoami)
+sudo usermod -a -G gpio $(whoami)
+```
+
 ## Install NVM and Node
 ```
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash

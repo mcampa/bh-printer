@@ -1,6 +1,6 @@
 const escpos = require('escpos');
 const os = require('os');
-const device = os.platform() === 'darwin' ? new escpos.USB() : new escpos.Serial('/dev/usb/lp0');
+const device = new escpos.USB();
 const printer = new escpos.Printer(device);
 
 function print(body) {
@@ -25,28 +25,13 @@ function print(body) {
 }
 
 function test() {
+  console.log('This is a test');
   device.open(() => {
     printer
-      .text('Hello World')
+      .text('This is a test')
       .feed()
       .close();
   });
 }
-
-// process.on('SIGINT', exit);
-// process.on('SIGTERM', exit);
-
-function exit() {
-  console.log('Stopping and halting ...');
-  try {
-    device.close(() => setTimeout(process.exit, 100));
-  } catch (e) {
-    process.exit();
-  }
-}
-
-process.on('uncaughtException', err => {
-  console.error(err);
-});
 
 module.exports = { print, test };
