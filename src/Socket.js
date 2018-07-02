@@ -4,10 +4,11 @@ const tunnel = require('./tunnel');
 
 class Socket {
   static init(url, printerId) {
-    const channel = new Socket(url, printerId);
-    channel.connect();
+    const socket = new Socket(url, printerId);
+    socket.connect();
+    printer.load();
 
-    return channel;
+    return socket;
   }
 
   constructor(url, printerId) {
@@ -25,15 +26,15 @@ class Socket {
     });
 
     this.socket.on('connect', () => {
-      console.log('connected');
+      console.log(new Date(), 'connected');
     });
 
     this.socket.on('welcome', data => {
-      console.log('welcome', data);
+      console.log(new Date(), 'welcome', data);
     });
 
     this.socket.on('command', async ({ event, data }) => {
-      console.log(`command received ${event}`, data);
+      console.log(new Date(), `command received ${event}`, data);
 
       if (event === 'print' || event === 'printOrder') {
         await printer.print(data);
