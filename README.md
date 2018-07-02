@@ -46,14 +46,13 @@ npm install -g yarn nodemon
 ```
 cd && git clone https://github.com/mcampa/bh-printer.git
 cd ~/bh-printer && yarn
+
+sudo touch /var/log/bh-printer.log
+sudo chmod 766 /var/log/bh-printer.log
 ```
 
 ## Start at boot
 Append to `/etc/rc.local` (replace printer id)
 ```
-export PRINTER_ID=printer1
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-cd ~/bh-printer
-./start.sh < /dev/null >/var/log/bh-printer.log 2>/var/log/bh-printer.err &
+PRINTER_ID=printer1 /home/pi/.nvm/versions/node/v8.11.3/bin/node /home/pi/bh-printer < /dev/null >/var/log/bh-printer.log 2>&1 &
 ```
