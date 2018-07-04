@@ -20,6 +20,24 @@ function load() {
   }
 }
 
+function isConnected() {
+  if (!device || !printer) {
+    return Promise.resolve(false);
+  }
+
+  return new Promise(resolve => {
+    try {
+      device.open(() => {
+        resolve(true);
+      });
+    } catch (err) {
+      console.log(new Date(), `Error opening device: ${err.message}`);
+      load();
+      return resolve(false);
+    }
+  });
+}
+
 function print(body) {
   if (!device) {
     queue.push(body);
@@ -68,4 +86,4 @@ function test() {
   });
 }
 
-module.exports = { print, test, load };
+module.exports = { isConnected, print, test, load };

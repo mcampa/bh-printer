@@ -1,7 +1,7 @@
 const Socket = require('./Socket');
 
 const PRINTER_ID = process.env.PRINTER_ID || 'TEST-PRINTER';
-const URL = 'https://api.bistrohub.com' || process.env.URL;
+const URL = process.env.URL || 'https://api.bistrohub.com';
 
 if (!PRINTER_ID) {
   throw new Error('No PRINTER_ID');

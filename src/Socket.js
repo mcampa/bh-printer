@@ -33,6 +33,16 @@ class Socket {
       console.log(new Date(), 'welcome', data);
     });
 
+    this.socket.on('health_request', async ({ replyTo }) => {
+      this.socket.emit('health_reply', {
+        id: replyTo,
+        health: {
+          printerId: this.printerId,
+          printerConnected: await printer.isConnected(),
+        },
+      });
+    });
+
     this.socket.on('command', async ({ event, data }) => {
       console.log(new Date(), `command received ${event}`, data);
 
@@ -52,10 +62,6 @@ class Socket {
 
       if (event === 'print_test') {
         printer.test();
-      }
-
-      if (event === 'health') {
-        socket.emit({ id: this.printerId, date: new Date() });
       }
     });
   }
