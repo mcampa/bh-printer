@@ -54,6 +54,8 @@ sudo chmod 766 /var/log/bh-printer.log
 ## Start at boot
 Append to `/etc/rc.local` (replace printer id)
 ```
+until ping -W 1 -c 1 8.8.8.8; do sleep 1; done
+
 PRINTER_ID=printer1 /home/pi/.nvm/versions/node/v8.11.3/bin/node /home/pi/bh-printer < /dev/null >/var/log/bh-printer.log 2>&1 &
 ```
 
