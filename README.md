@@ -56,3 +56,8 @@ Append to `/etc/rc.local` (replace printer id)
 ```
 PRINTER_ID=printer1 /home/pi/.nvm/versions/node/v8.11.3/bin/node /home/pi/bh-printer < /dev/null >/var/log/bh-printer.log 2>&1 &
 ```
+
+## Test development
+```
+URL=http://api.bistrohub.local PRINTER_ID=AXXXXXXX USE_CONSOLE=1 nodemon
+```

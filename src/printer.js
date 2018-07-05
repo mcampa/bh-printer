@@ -1,4 +1,5 @@
 const escpos = require('escpos');
+const process = require('process');
 
 const queue = [];
 let device;
@@ -8,7 +9,7 @@ function load() {
   device = undefined;
   printer = undefined;
   try {
-    device = new escpos.USB();
+    device = process.env.USE_CONSOLE ? new escpos.Console() : new escpos.USB();
     printer = new escpos.Printer(device);
     console.log(new Date(), 'printer connected');
     printQueue();
