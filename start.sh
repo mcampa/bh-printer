@@ -9,11 +9,11 @@ export NVM_DIR="$HOME/.nvm"
 until ping -W 1 -c 1 8.8.8.8; do sleep 1; done
 
 function launch {
-    cd /home/pi/bh-printer
+    pushd /home/pi/bh-printer
+    git fetch --all
     git reset --hard @{u}
     yarn
-    # nodemon ./
-    /home/pi/.nvm/versions/node/v8.11.3/bin/node ./
+    nodemon ./
 }
 
 launch
