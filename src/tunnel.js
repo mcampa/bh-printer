@@ -1,23 +1,17 @@
 const ngrok = require('ngrok');
+const { exec } = require('child_process');
 
-function close() {
-  ngrok.disconnect();
-  ngrok.kill();
+async function close() {
+  await ngrok.disconnect(); // stops all
+  await ngrok.kill();
+  exec('killall ngrok');
 }
 
-function open(data) {
-  const defaultToken = '6tywGLqjiQtvoD6wATeUD_86MgyZojffhj83sUmsirP';
-
-  return new Promise((resolve, reject) => {
-    ngrok.connect(
-      { authtoken: data.authtoken || defaultToken, proto: 'tcp', addr: 22 },
-      (err, url) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(url);
-      },
-    );
+function open(data = {}) {
+  return ngrok.connect({
+    authtoken: data.authtoken || '6tywGLqjiQtvoD6wATeUD_86MgyZojffhj83sUmsirP',
+    proto: 'tcp',
+    addr: 22,
   });
 }
 

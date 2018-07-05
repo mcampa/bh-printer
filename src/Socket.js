@@ -48,16 +48,24 @@ class Socket {
 
       if (event === 'print' || event === 'printOrder') {
         await printer.print(data);
-        this.socket.emit('OK');
+        this.socket.emit('print_reply', 'OK');
       }
 
       if (event === 'tunnel_open') {
-        const tunnel = await tunnel.open(data);
-        this.socket.emit({ tunnel });
+        console.log(event, data);
+        try {
+          const url = await tunnel.open(data || {});
+          console.log(new Date(), `tunnel opened ${url}`);
+          this.socket.emit('tunnel_reply', { tunnel: url });
+        } catch (error) {
+          this.socket.emit('tunnel_reply', { error: error.message });
+          console.log(new Date(), error.message);
+        }
       }
 
       if (event === 'tunnel_close') {
         tunnel.close();
+        this.socket.emit('tunnel_reply', { tunnel: false });
       }
 
       if (event === 'print_test') {

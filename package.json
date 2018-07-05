@@ -2,7 +2,6 @@
   "name": "bh-printer",
   "version": "1.0.0",
   "description": "",
-  "private": true,
   "main": "src/main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,7 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "escpos": "^2.3.0",
-    "ngrok": "^2.2.6",
+    "ngrok": "^3.0.1",
     "socket.io-client": "^2.1.1"
   }
 }
