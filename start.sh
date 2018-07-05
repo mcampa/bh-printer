@@ -1,8 +1,10 @@
 #!/bin/bash
 set -e
 
+echo "I am $(whoami)"
+
 # This loads nvm
-export NVM_DIR="$HOME/.nvm"
+export NVM_DIR="/home/pi/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 # wait for internet
