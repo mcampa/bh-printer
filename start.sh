@@ -12,7 +12,8 @@ function launch {
     cd /home/pi/bh-printer
     git reset --hard @{u}
     yarn
-    nodemon ./
+    # nodemon ./
+    /home/pi/.nvm/versions/node/v8.11.3/bin/node ./
 }
 
 launch
