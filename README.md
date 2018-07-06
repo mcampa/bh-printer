@@ -16,23 +16,21 @@ sudo dd bs=1m if=raspbian.img of=/dev/rdisk2 conv=sync
     1. Connect to pi WIFI hotspot "comitup-XXXX"
     2. Go to http://10.42.0.1 and follow instructions
     3. Get pi's IP from local router
-    4. SSH in pi `ssh pi@192.168.0.100` password: `raspbian`
+    4. SSH in pi ssh pi@192.168.0.100 password: raspberry
     5. Run `passwd` to change password to be the same printerID
 
 ## Upgrade and install essentials
 ```
-sudo apt-get update
-sudo apt-get upgrade
-sudo apt-get dist-upgrade
-sudo apt-get install -y git build-essential libudev-dev
 sudo dpkg-reconfigure locales (en_US.UTF-8 UTF-8)
+sudo apt-get -y update
+sudo apt-get -y upgrade
+sudo apt-get -y dist-upgrade
+sudo apt-get -y install git build-essential libudev-dev
 ```
 
 ## Give user permissions to access usb
 ```
-sudo usermod -a -G lp $(whoami)
-sudo usermod -a -G dialout $(whoami)
-sudo usermod -a -G gpio $(whoami)
+sudo usermod -a -G lp,dialout,gpio $(whoami)
 ```
 
 ## Install NVM and Node
@@ -54,10 +52,10 @@ sudo chmod 766 /var/log/bh-printer.log
 ## Start at boot
 Append to `/etc/rc.local` (replace printer id)
 ```
-PRINTER_ID=printer1 /home/pi/bh-printer/start.sh < /dev/null >/var/log/bh-printer.log 2>&1 &
+PRINTER_ID=AXXXXXXXX /home/pi/bh-printer/start.sh < /dev/null >/var/log/bh-printer.log 2>&1 &
 ```
 
 ## Test development
 ```
-URL=http://api.bistrohub.local PRINTER_ID=AXXXXXXX USE_CONSOLE=1 nodemon
+URL=http://api.bistrohub.local PRINTER_ID=AXXXXXXXX USE_CONSOLE=1 nodemon
 ```
