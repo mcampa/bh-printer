@@ -15,7 +15,7 @@ function launch {
     git fetch --all
     git reset --hard @{u}
     yarn
-    nodemon ./
+    node ./
 }
 
 launch

@@ -25,19 +25,19 @@ sudo dpkg-reconfigure locales (en_US.UTF-8 UTF-8)
 sudo apt-get -y update
 sudo apt-get -y upgrade
 sudo apt-get -y dist-upgrade
-sudo apt-get -y install git build-essential libudev-dev
+sudo apt-get -y install git build-essential libudev-dev supervisor
 ```
 
 ## Give user permissions to access usb
 ```
-sudo usermod -a -G lp,dialout,gpio $(whoami)
+sudo usermod -a -G lp,dialout,gpio pi
 ```
 
 ## Install NVM and Node
 ```
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 nvm install 8
-npm install -g yarn nodemon
+npm install -g yarn
 ```
 
 ## install bh-printer
@@ -50,9 +50,20 @@ sudo chmod 766 /var/log/bh-printer.log
 ```
 
 ## Start at boot
-Append to `/etc/rc.local` (replace printer id)
+Create supervisor file `sudo vim /etc/supervisor/conf.d/bh-printer.conf`
 ```
-PRINTER_ID=AXXXXXXXX /home/pi/bh-printer/start.sh < /dev/null >/var/log/bh-printer.log 2>&1 &
+[program:bh-printer]
+user=pi
+environment=HOME=/home/pi,USER=pi,PRINTER_ID=AXXXXXXXX
+directory=/home/pi/bh-printer
+command=/home/pi/bh-printer/start.sh
+stdout_logfile=/var/log/bh-printer.log
+redirect_stderr=true
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+stopsignal=INT
 ```
 
 ## Test development
