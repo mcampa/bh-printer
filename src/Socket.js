@@ -1,6 +1,10 @@
 const socketIO = require('socket.io-client');
 const printer = require('./printer');
 const tunnel = require('./tunnel');
+const revision = require('child_process')
+  .execSync('git rev-parse HEAD')
+  .toString()
+  .trim();
 
 class Socket {
   static init(url, printerId) {
@@ -27,6 +31,7 @@ class Socket {
 
     this.socket.on('connect', () => {
       console.log(new Date(), 'connected');
+      this.serverLog({ printerId: this.printerId, revision });
     });
 
     this.socket.on('welcome', data => {
@@ -39,6 +44,7 @@ class Socket {
         health: {
           printerId: this.printerId,
           printerConnected: await printer.isConnected(),
+          revision,
         },
       });
     });
@@ -48,30 +54,33 @@ class Socket {
 
       if (event === 'print' || event === 'printOrder') {
         await printer.print(data);
-        this.socket.emit('print_reply', 'OK');
+        this.serverLog({ print: 'OK' });
       }
 
       if (event === 'tunnel_open') {
         console.log(event, data);
         try {
           const url = await tunnel.open(data || {});
-          console.log(new Date(), `tunnel opened ${url}`);
-          this.socket.emit('tunnel_reply', { tunnel: url });
+          this.serverLog({ tunnel: url });
         } catch (error) {
-          this.socket.emit('tunnel_reply', { error: error.message });
-          console.log(new Date(), error.message);
+          this.serverLog({ tunnel: { error: error.message } });
         }
       }
 
       if (event === 'tunnel_close') {
         tunnel.close();
-        this.socket.emit('tunnel_reply', { tunnel: false });
+        this.serverLog({ tunnel: null });
       }
 
       if (event === 'print_test') {
         printer.test();
       }
     });
+  }
+
+  serverLog(data) {
+    this.socket.emit('log', data);
+    console.log(new Date(), 'serverLog', data);
   }
 }
 
