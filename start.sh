@@ -14,8 +14,8 @@ function launch {
     pushd /home/pi/bh-printer
     git fetch --all
     git reset --hard @{u}
-    yarn
-    nodemon ./
+    /home/pi/.nvm/versions/node/v8.11.3/bin/yarn
+    /home/pi/.nvm/versions/node/v8.11.3/bin/nodemon ./
 }
 
 launch
