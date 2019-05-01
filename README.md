@@ -1,14 +1,21 @@
 # bh-printer
 
-This a bistrohub printer client that runs on raspberrypi. It uses socketIO to listen for print orders
+This is a bistrohub printer client that runs on a raspberry pi. It uses socketIO to listen for print orders
+
+#Download image:
+    1. Download image from:
+        - https://steele.debian.net/comitup/image_2019-03-30-Comitup.zip
+         - or https://davesteele.github.io/comitup/
 
 ## Burn image:
-    1. Download image from https://steele.debian.net/comitup/image_2018-06-29-Comitup.zip
-    2. Follow this steps for MacOS https://www.raspberrypi.org/documentation/installation/installing-images/mac.md
+    - Follow this steps for MacOS https://www.raspberrypi.org/documentation/installation/installing-images/mac.md
 
-In summary, run this command:
+In summary, run this commands:
 ```
-sudo dd bs=1m if=raspbian.img of=/dev/rdisk2 conv=sync
+diskutil list # identify the disk
+diskutil unmountDisk /dev/disk3
+sudo dd bs=1m if=image.img of=/dev/rdisk3 conv=sync
+sudo diskutil eject /dev/rdisk3
 ```
 
 ## Connect to WIFI
@@ -17,7 +24,7 @@ sudo dd bs=1m if=raspbian.img of=/dev/rdisk2 conv=sync
     2. Go to http://10.42.0.1 and follow instructions
     3. Get pi's IP from local router
     4. SSH in pi ssh pi@192.168.0.100 password: raspberry
-    5. Run `passwd` to change password to be the same printerID
+    5. Run `sudo passwd pi` to change password to be the same printerID
 
 ## Upgrade and install essentials
 ```
